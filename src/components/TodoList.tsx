@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { TodoListItem } from "./TodoListItem";
 
 interface TodoListProps {

@@ -25,7 +25,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
             type="text"
             value={newTodo}
             className="todo-input"
-            placeholder="Add a todo"
+            placeholder="What's next?!"
             onChange={handleChange}
           />
         </form>

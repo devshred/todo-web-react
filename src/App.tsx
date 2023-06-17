@@ -1,17 +1,24 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Header from "./components/Header";
 import TodoList from "./components/TodoList";
 import TodoForm from "./components/TodoForm";
 import TodoSummary from "./components/TodoSummary";
+import ApiClient from "./ApiClient";
 
 const App: React.FC = () => {
   
-  const [todos, setTodos] = useState<Array<Todo>>([
-    { id: uuidv4(), text: "Do something.", done: false },
-    { id: uuidv4(), text: "Do something else.", done: false },
-    { id: uuidv4(), text: "Done something.", done: true },
-  ]);
+  const [todos, setTodos] = useState<Array<Todo>>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const todosFromDb = await ApiClient.allTodos();
+
+      setTodos(todosFromDb);
+    };
+
+    fetchData();
+  }, []);
 
   const [hideCompleted, setHideCompleted] = useState<boolean>(false);
 
@@ -22,13 +29,15 @@ const App: React.FC = () => {
     ];
   }, [todos, hideCompleted]);
 
-  const addTodo: AddTodo = (newTodo) => {
+  const addTodo: AddTodo = async (newTodo) => {
     if (newTodo !== "") {
-      setTodos([...todos, { id: uuidv4(), text: newTodo, done: false }]);
+      const createdTodo = await ApiClient.addTodo(newTodo);
+      setTodos([...todos, createdTodo]);
     }
   };
 
   const toggleStatus: ToggleStatus = (selectedTodo) => {
+    ApiClient.toggleStatus(selectedTodo);
     const updatedTodos = todos.map((todo) => {
       if (todo === selectedTodo) {
         return { ...todo, done: !todo.done };
@@ -38,12 +47,14 @@ const App: React.FC = () => {
     setTodos(updatedTodos);
   };
 
-  const removeTodo: RemoveTodo = (todoToRemove) => {
+  const removeTodo: RemoveTodo = async (todoToRemove) => {
+    await ApiClient.removeTodo(todoToRemove);
     const remainingTodos = todos.filter((todo) =>  todo !== todoToRemove );
     setTodos(remainingTodos);
   };
 
   const deleteCompleted = () => {
+    todos.filter((todo) =>  todo.done).forEach((d) => removeTodo(d));
     setTodos(todos.filter((t) => !t.done));
   };
 
