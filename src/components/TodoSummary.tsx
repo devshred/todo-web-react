@@ -1,32 +1,31 @@
-import { FormEvent, useState } from "react";
+import { useContext } from 'react'
+import TodoContext from '../context/TodoContext'
 
-interface TodoSummaryProps {
-  remaining: number;
-  hideCompleted: boolean;
-  clickHideCompleted: any;
-  deleteCompleted: any;
-}
+interface TodoSummaryProps {}
 
-export const TodoSummary: React.FC<TodoSummaryProps> = ({ remaining, hideCompleted, clickHideCompleted, deleteCompleted }) => {
+export const TodoSummary: React.FC<TodoSummaryProps> = () => {
+  const { remaining, deleteCompleted, hideCompleted, toggleHideCompleted } =
+    useContext(TodoContext)
+
   return (
     <footer>
-      <span className="text">{remaining} remaining items left.</span>
+      <span className='text'>{remaining} remaining items left.</span>
       <button
-        className="summaryButton"
+        className='summaryButton'
         onClick={deleteCompleted}
-        style={{ float: "right" }}
+        style={{ float: 'right' }}
       >
         Delete completed
       </button>
       <button
-        type="submit"
-        className="summaryButton"
-        onClick={clickHideCompleted}
+        type='submit'
+        className='summaryButton'
+        onClick={toggleHideCompleted}
       >
-        { hideCompleted? 'Show all' : 'Hide completed' }
+        {hideCompleted ? 'Show all' : 'Hide completed'}
       </button>
     </footer>
-  );
-};
+  )
+}
 
-export default TodoSummary;
+export default TodoSummary

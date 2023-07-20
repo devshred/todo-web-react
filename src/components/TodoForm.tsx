@@ -1,38 +1,39 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from 'react'
+import TodoContext from '../context/TodoContext'
 
-interface TodoFormProps {
-  addTodo: AddTodo;
-}
+interface TodoFormProps {}
 
-export const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
-  const [newTodo, setNewTodo] = useState<string>("");
+export const TodoForm: React.FC<TodoFormProps> = () => {
+  const { addTodo } = useContext(TodoContext)
+
+  const [newTodo, setNewTodo] = useState<string>('')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewTodo(e.target.value);
-  };
+    setNewTodo(e.target.value)
+  }
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    addTodo(newTodo);
-    setNewTodo("");
-  };
+    e.preventDefault()
+    addTodo(newTodo)
+    setNewTodo('')
+  }
 
   return (
-    <div className="input__div">
-      <div className="input__wrapper">
-        <form className="todo-form" onSubmit={handleSubmit}>
+    <div className='input__div'>
+      <div className='input__wrapper'>
+        <form className='todo-form' onSubmit={handleSubmit}>
           <input
-            type="text"
+            type='text'
             value={newTodo}
-            className="todo-input"
+            className='todo-input'
             placeholder="What's next?!"
             onChange={handleChange}
           />
         </form>
       </div>
-      <div className="border"></div>
+      <div className='border'></div>
     </div>
-  );
-};
+  )
+}
 
-export default TodoForm;
+export default TodoForm

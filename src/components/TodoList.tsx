@@ -1,30 +1,21 @@
-import { TodoListItem } from "./TodoListItem";
+import { useContext } from 'react'
+import { TodoListItem } from './TodoListItem'
+import TodoContext from '../context/TodoContext'
 
-interface TodoListProps {
-  todos: Array<Todo>;
-  toggleStatus: ToggleStatus;
-  removeTodo: RemoveTodo;
+interface TodoListProps {}
+
+export const TodoList: React.FC<TodoListProps> = () => {
+  const { filteredTodos } = useContext(TodoContext)
+
+  return (
+    <div className='todo-list'>
+      <div>
+        {filteredTodos.map((todo) => (
+          <TodoListItem key={todo.id} todo={todo} />
+        ))}
+      </div>
+    </div>
+  )
 }
 
-export const TodoList: React.FC<TodoListProps> = ({
-  todos,
-  toggleStatus,
-  removeTodo,
-}) => {
-  return (
-    <div className="todo-list">
-        <div>
-            {todos.map((todo) => (
-                <TodoListItem
-                key={todo.id}
-                todo={todo}
-                toggleStatus={toggleStatus}
-                removeTodo={removeTodo}
-                />
-            ))}
-        </div>
-    </div>
-  );
-};
-
-export default TodoList;
+export default TodoList
