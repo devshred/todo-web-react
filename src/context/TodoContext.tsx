@@ -63,14 +63,18 @@ export const TodoProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const toggleHideCompleted = () => setHideCompleted(!hideCompleted)
 
-  const removeTodo: RemoveTodo = async (todoToRemove) => {
+  const executeRemoveTodo: RemoveTodo = async (todoToRemove) => {
     await ApiClient.removeTodo(todoToRemove)
+  }
+
+  const removeTodo: RemoveTodo = (todoToRemove) => {
+    executeRemoveTodo(todoToRemove)
     const remainingTodos = todos.filter((todo) => todo !== todoToRemove)
     setTodos(remainingTodos)
   }
 
   const deleteCompleted = () => {
-    todos.filter((todo) => todo.done).forEach((d) => removeTodo(d))
+    todos.filter((todo) => todo.done).forEach((d) => executeRemoveTodo(d))
     const remainingTodos = todos.filter((todo) => !todo.done)
     setTodos(remainingTodos)
   }
